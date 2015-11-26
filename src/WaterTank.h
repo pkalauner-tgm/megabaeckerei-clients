@@ -6,20 +6,26 @@
 #define SIMULATION_WATERTANK_H
 
 
+#include <atomic>
+#include "SocketHandler.h"
+
+class SocketHandler;
 class WaterTank {
 private:
+    const int MAX_FUELLSTAND = 2000;
+    SocketHandler * socketHandler;
     int fuellstand;
+    volatile bool mischer_ventil;
+    volatile bool lager_ventil;
+    void mischer_ventil_open_loop();
+    void lager_ventil_open_loop();
 public:
     WaterTank();
-    void addWater(int amount);
-
-    int getFuellstand() const {
-        return fuellstand;
-    }
-
-    void setFuellstand(int fuellstand) {
-        WaterTank::fuellstand = fuellstand;
-    }
+    void toggle_mischer_ventil();
+    void toggle_lager_ventil();
+    void setSocketHandler(SocketHandler* sh);
+    int getFuellstand() const;
+    void setFuellstand(int fuellstand);
 };
 
 

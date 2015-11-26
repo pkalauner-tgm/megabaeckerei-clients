@@ -12,11 +12,12 @@
 #include <thread>
 #include <atomic>
 
+class WaterTank;
 class SocketHandler {
 private:
     std::string hostname;
     int port;
-    std::atomic<bool> active;
+    volatile bool active;
     long rc;
     SOCKET s;
     WaterTank* waterTank;
@@ -27,6 +28,8 @@ private:
     void handleRequest(char* buf);
 
 public:
+    std::thread t;
+
     SocketHandler(WaterTank* wt, std::string hostname, int port);
     ~SocketHandler();
 
