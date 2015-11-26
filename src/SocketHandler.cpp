@@ -51,14 +51,14 @@ void SocketHandler::handleRequestsLoop() {
 
 void SocketHandler::handleRequest(char *buf) {
     std::string msg = std::string(buf);
-    std::cout << "Message from Server: " << msg << std::endl;
-
     if (msg == "get_water_fuellstand") {
         sendMessage("water_fuellstand " + std::to_string(waterTank->getFuellstand()));
     } else if (msg == "toggle_water_to_mischer_ventil") {
         waterTank->toggle_mischer_ventil();
     } else if (msg == "toggle_lager_to_water_ventil") {
         waterTank->toggle_lager_ventil();
+    } else {
+        sendMessage("Invalid command");
     }
 }
 
