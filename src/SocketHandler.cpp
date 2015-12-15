@@ -4,6 +4,7 @@
 
 #include "SocketHandler.h"
 #include <iostream>
+#include <boost/algorithm/string.hpp>
 
 SocketHandler::SocketHandler(WaterTank* wt, std::string hostname, int port) {
     this->active = true;
@@ -52,6 +53,7 @@ void SocketHandler::handleRequestsLoop() {
 
 void SocketHandler::handleRequest(char *buf) {
     std::string msg = std::string(buf);
+    boost::replace_all(msg, "\r\n", "\n");
     std::cout << msg << std::endl;
     if (msg == "get_level\n") {
         sendMessage("level_water " + std::to_string(waterTank->getFuellstand()));

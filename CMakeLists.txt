@@ -6,6 +6,11 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -lws2_32")
 
 set(SOURCE_FILES src/main.cpp src/WaterTank.cpp src/WaterTank.h src/SocketHandler.cpp src/SocketHandler.h)
 add_executable(simulation ${SOURCE_FILES})
+set(Boost_USE_STATIC_LIBS ON)
+find_package(Boost COMPONENTS serialization REQUIRED)
+include_directories(${Boost_INCLUDE_DIR})
+link_directories(${Boost_LIBRARY_DIR})
+
 if(WIN32)
-    target_link_libraries(simulation wsock32 ws2_32)
+    target_link_libraries(simulation wsock32 ws2_32 ${Boost_LIBRARIES})
 endif()
