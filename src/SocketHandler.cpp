@@ -36,6 +36,7 @@ void SocketHandler::initSocket(void) {
     addr.sin_port = htons(port);
     addr.sin_addr.s_addr = inet_addr(hostname.c_str());
     rc = connect(s, (SOCKADDR *) &addr, sizeof(SOCKADDR));
+    this->sendMessage("identify WATERTANK");
     t = std::thread(&SocketHandler::handleRequestsLoop, this);
 }
 
@@ -52,11 +53,11 @@ void SocketHandler::handleRequestsLoop() {
 void SocketHandler::handleRequest(char *buf) {
     std::string msg = std::string(buf);
     std::cout << msg << std::endl;
-    if (msg == "get_level_water") {
+    if (msg == "get_level\n") {
         sendMessage("level_water " + std::to_string(waterTank->getFuellstand()));
-    } else if (msg == "toggle_water_to_mischer_ventil") {
+    } else if (msg == "toggle_water_to_mischer_ventil\n") {
         waterTank->toggle_mischer_ventil();
-    } else if (msg == "toggle_lager_to_water_ventil") {
+    } else if (msg == "toggle_lager_to_water_ventil\n") {
         waterTank->toggle_lager_ventil();
     } else {
         sendMessage("Invalid command");
@@ -64,7 +65,8 @@ void SocketHandler::handleRequest(char *buf) {
 }
 
 void SocketHandler::sendMessage(std::string message) {
-    send(s, message.c_str(), (int) strlen(message.c_str()), 0);
+    std::string newmsg = message + "\n";
+    send(s, newmsg.c_str(), (int) strlen(newmsg.c_str()), 0);
 }
 
 int SocketHandler::startWinsock(void) {

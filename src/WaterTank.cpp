@@ -37,8 +37,8 @@ void WaterTank::mischer_ventil_open_loop() {
             amount = fuellstand;
 
         setFuellstand(fuellstand - amount);
-        std::string msg = "water_to_mischer " + std::to_string(amount);
-        socketHandler->sendMessage(msg);
+        socketHandler->sendMessage("water_to_mischer " + std::to_string(amount));
+        socketHandler->sendMessage("level_water " + std::to_string(fuellstand));
         Sleep(100);
     }
 }
@@ -52,8 +52,7 @@ void WaterTank::lager_ventil_open_loop() {
             amount = MAX_FUELLSTAND - fuellstand;
 
         setFuellstand(fuellstand + amount);
-        std::string msg = "water_to_tank " + std::to_string(amount);
-        socketHandler->sendMessage(msg);
+        socketHandler->sendMessage("level_water " + std::to_string(fuellstand));
         Sleep(100);
     }
 }
