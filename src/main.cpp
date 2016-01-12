@@ -1,8 +1,16 @@
 #include "SocketHandler.h"
+#include <iostream>
+
+using std::cout;
+using std::endl;
 
 int main()
 {
-    WaterTank wt = WaterTank();
+    cout << "Megabaeckerei-Mixtank" << endl;
+    cout << "---------------------" << endl;
+    cout << endl;
+
+    MixTank wt = MixTank();
     SocketHandler* sh = new SocketHandler(&wt, "127.0.0.1", 12345);
     wt.setSocketHandler(sh);
 
