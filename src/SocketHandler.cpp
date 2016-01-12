@@ -54,7 +54,7 @@ void SocketHandler::handleRequestsLoop() {
 void SocketHandler::handleRequest(char *buf) {
     std::string msg = std::string(buf);
     boost::replace_all(msg, "\r\n", "\n");
-    std::cout << msg << std::endl;
+    //std::cout << msg << std::endl;
     if (msg == "get_level\n") {
         sendMessage("level_water " + std::to_string(waterTank->getFuellstand()));
     } else if (msg == "toggle_water_to_mischer_ventil\n") {
