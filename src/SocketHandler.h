@@ -6,13 +6,13 @@
 #define SIMULATION_SOCKETHANDLER_H
 
 
-#include "MixTank.h"
+#include "Oven.h"
 #include <string>
 #include <winsock2.h>
 #include <thread>
 #include <atomic>
 
-class MixTank;
+class Oven;
 class SocketHandler {
 private:
     std::string hostname;
@@ -20,7 +20,7 @@ private:
     volatile bool active;
     long rc;
     SOCKET s;
-    MixTank * waterTank;
+    Oven *oven;
 
     int startWinsock(void);
     void initSocket(void);
@@ -30,7 +30,7 @@ private:
 public:
     std::thread t;
 
-    SocketHandler(MixTank * wt, std::string hostname, int port);
+    SocketHandler(Oven * wt, std::string hostname, int port);
     ~SocketHandler();
 
     void sendMessage(std::string message);

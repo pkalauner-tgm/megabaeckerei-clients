@@ -6,11 +6,11 @@ using std::endl;
 
 int main()
 {
-    cout << "Megabaeckerei-Mixtank" << endl;
-    cout << "---------------------" << endl;
+    cout << "Megabaeckerei-Oven" << endl;
+    cout << "------------------" << endl;
     cout << endl;
 
-    MixTank wt = MixTank();
+    Oven wt = Oven();
     SocketHandler* sh = new SocketHandler(&wt, "127.0.0.1", 12345);
     wt.setSocketHandler(sh);
 

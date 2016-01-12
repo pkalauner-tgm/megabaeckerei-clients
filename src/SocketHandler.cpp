@@ -6,11 +6,11 @@
 #include <iostream>
 #include <boost/algorithm/string.hpp>
 
-SocketHandler::SocketHandler(MixTank * wt, std::string hostname, int port) {
+SocketHandler::SocketHandler(Oven *wt, std::string hostname, int port) {
     this->active = true;
     this->hostname = hostname;
     this->port = port;
-    this->waterTank = wt;
+    this->oven = wt;
     this->initSocket();
 }
 
@@ -37,7 +37,7 @@ void SocketHandler::initSocket(void) {
     addr.sin_port = htons(port);
     addr.sin_addr.s_addr = inet_addr(hostname.c_str());
     rc = connect(s, (SOCKADDR *) &addr, sizeof(SOCKADDR));
-    this->sendMessage("identify MIXTANK");
+    this->sendMessage("identify OVEN");
     t = std::thread(&SocketHandler::handleRequestsLoop, this);
 }
 
@@ -56,11 +56,21 @@ void SocketHandler::handleRequest(char *buf) {
     boost::replace_all(msg, "\r\n", "\n");
     //std::cout << msg << std::endl;
     if (msg == "get_level\n") {
-        sendMessage("level_mixtank " + std::to_string(waterTank->getFuellstand()));
-    } else if (msg == "toggle_mixtank_to_mixer_ventil\n") {
-        waterTank->toggle_mischer_ventil();
-    } else if (msg == "toggle_lager_to_mixtank_ventil\n") {
-        waterTank->toggle_lager_ventil();
+        sendMessage("level_oven " + std::to_string(oven->getFuellstand()));
+    } else if (msg == "take_bread\n") {
+        oven->setFuellstand(0);
+        sendMessage("level_oven " + std::to_string(oven->getFuellstand()));
+    } else if (msg == "add_mixedMix10\n") {
+        int amount = 0;
+        if (oven->getFuellstand() <= (4000 - 10))
+            amount = 10;
+        else
+            amount = 4000 - oven->getFuellstand();
+
+        oven->setFuellstand(oven->getFuellstand() + amount);
+        sendMessage("level_oven " + std::to_string(oven->getFuellstand()));
+    } else if (msg == "set_temperature\n") {
+
     } else {
         sendMessage("Invalid command");
     }

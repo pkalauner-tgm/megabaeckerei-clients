@@ -10,9 +10,9 @@
 #include "SocketHandler.h"
 
 class SocketHandler;
-class MixTank {
+class Oven {
 private:
-    const int MAX_FUELLSTAND = 2000;
+    const int MAX_FUELLSTAND = 4000;
     SocketHandler * socketHandler;
     int fuellstand;
     volatile bool mischer_ventil;
@@ -20,7 +20,7 @@ private:
     void mischer_ventil_open_loop();
     void lager_ventil_open_loop();
 public:
-    MixTank();
+    Oven();
     void toggle_mischer_ventil();
     void toggle_lager_ventil();
     void setSocketHandler(SocketHandler* sh);
