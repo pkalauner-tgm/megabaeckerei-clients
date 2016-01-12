@@ -10,7 +10,7 @@ SocketHandler::SocketHandler(MixTank * wt, std::string hostname, int port) {
     this->active = true;
     this->hostname = hostname;
     this->port = port;
-    this->waterTank = wt;
+    this->mixer = wt;
     this->initSocket();
 }
 
@@ -37,7 +37,7 @@ void SocketHandler::initSocket(void) {
     addr.sin_port = htons(port);
     addr.sin_addr.s_addr = inet_addr(hostname.c_str());
     rc = connect(s, (SOCKADDR *) &addr, sizeof(SOCKADDR));
-    this->sendMessage("identify MIXTANK");
+    this->sendMessage("identify MIXER");
     t = std::thread(&SocketHandler::handleRequestsLoop, this);
 }
 
@@ -56,11 +56,18 @@ void SocketHandler::handleRequest(char *buf) {
     boost::replace_all(msg, "\r\n", "\n");
     //std::cout << msg << std::endl;
     if (msg == "get_level\n") {
-        sendMessage("level_mixtank " + std::to_string(waterTank->getFuellstand()));
-    } else if (msg == "toggle_mixtank_to_mixer_ventil\n") {
-        waterTank->toggle_mischer_ventil();
-    } else if (msg == "toggle_lager_to_mixtank_ventil\n") {
-        waterTank->toggle_lager_ventil();
+        sendMessage("level_mixer " + std::to_string(mixer->getFuellstand()));
+    } else if (msg == "toggle_mixer_to_oven_ventil\n") {
+        mixer->toggle_oven_ventil();
+    } else if (msg == "add_water10\n" || msg == "add_mix10\n") {
+        int amount = 0;
+        if (mixer->getFuellstand() <= (4000 - 10))
+            amount = 10;
+        else
+            amount = 4000 - mixer->getFuellstand();
+
+        mixer->setFuellstand(mixer->getFuellstand()+amount);
+        sendMessage("level_mixer " + std::to_string(mixer->getFuellstand()));
     } else {
         sendMessage("Invalid command");
     }

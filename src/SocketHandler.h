@@ -6,7 +6,7 @@
 #define SIMULATION_SOCKETHANDLER_H
 
 
-#include "MixTank.h"
+#include "Mixer.h"
 #include <string>
 #include <winsock2.h>
 #include <thread>
@@ -20,7 +20,7 @@ private:
     volatile bool active;
     long rc;
     SOCKET s;
-    MixTank * waterTank;
+    MixTank *mixer;
 
     int startWinsock(void);
     void initSocket(void);

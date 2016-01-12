@@ -6,8 +6,8 @@ using std::endl;
 
 int main()
 {
-    cout << "Megabaeckerei-Mixtank" << endl;
-    cout << "---------------------" << endl;
+    cout << "Megabaeckerei-Mixer" << endl;
+    cout << "-------------------" << endl;
     cout << endl;
 
     MixTank wt = MixTank();
